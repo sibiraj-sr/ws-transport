@@ -1,14 +1,27 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import {
+  afterAll, beforeAll, describe, expect, it, jest,
+} from '@jest/globals';
+import { closeServer, runServer } from '../ws-server.js';
 
 import Transport from './transport.js';
 
-const SERVER_URL = 'ws://localhost:7654/ws';
+const PORT = 7654;
+
+const SERVER_URL = `ws://localhost:${PORT}/ws`;
 
 const delay = (timeout) => {
   return new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
 };
+
+beforeAll(async () => {
+  await runServer(PORT);
+});
+
+afterAll(async () => {
+  await closeServer();
+});
 
 describe('Transport', () => {
   it('should initialize correctly', () => {

@@ -3,8 +3,6 @@ import { URLSearchParams } from 'node:url';
 import { WebSocketServer } from 'ws';
 import express from 'express';
 
-const PORT = 7654;
-
 const app = express();
 const server = createServer(app);
 
@@ -76,6 +74,19 @@ wss.on('connection', (conn, req) => {
   ping();
 });
 
-server.listen(PORT, () => {
-  console.info(`Server listening at http://localhost:${PORT}`);
-});
+export const runServer = (port) => {
+  return new Promise((resolve) => {
+    server.listen(port, () => {
+      console.info(`Server listening at http://localhost:${port}`);
+      resolve();
+    });
+  });
+};
+
+export const closeServer = () => {
+  return new Promise((resolve) => {
+    server.close(() => {
+      resolve();
+    });
+  });
+};
